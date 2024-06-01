@@ -37,6 +37,9 @@ import xyz.ksharma.scrolltotop.ui.components.ListItem
 @Composable
 fun ShoppingCartScreen(modifier: Modifier = Modifier, shoppingCart: ImmutableMap<String, String>) {
     val listState = rememberLazyListState()
+
+    // Show the button if the first visible list item is past the first item.
+    // We use a remembered derived state to minimize unnecessary compositions.
     val showButton by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
     val coroutineScope = rememberCoroutineScope()
 
