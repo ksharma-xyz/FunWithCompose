@@ -20,7 +20,7 @@ fun ListItem(productName: String, quantity: String, modifier: Modifier = Modifie
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -29,14 +29,14 @@ fun ListItem(productName: String, quantity: String, modifier: Modifier = Modifie
             text = productName,
             modifier = Modifier,
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
 
         Text(
             text = quantity,
             modifier = Modifier.padding(start = 16.dp),
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
     }
 }
