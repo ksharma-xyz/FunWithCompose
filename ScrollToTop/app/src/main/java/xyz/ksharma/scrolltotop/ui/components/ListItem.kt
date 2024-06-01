@@ -16,20 +16,19 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import xyz.ksharma.scrolltotop.ui.theme.ScrollToTopTheme
 
-
 @Composable
 fun ListItem(
     productName: String,
     quantity: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    onClick: (productName: String) -> Unit = {},
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
             .clickable {
-                onClick()
+                onClick(productName)
             }
             .semantics(mergeDescendants = true) { }
             .padding(16.dp),
