@@ -13,7 +13,7 @@ import java.io.InputStream
 object Repository {
 
     suspend fun fetchGroceryList(context: Context): ShoppingCart = withContext(Dispatchers.IO) {
-        delay(2000)
+//        delay(2000)
         val inputStream: InputStream = context.assets.open("shopping_cart.json")
         val jsonString = inputStream.toJsonString()
         return@withContext jsonStringToDataClass<ShoppingCart>(jsonString)

@@ -1,38 +1,49 @@
 package xyz.ksharma.scrolltotop.ui
 
-
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.coroutines.launch
 import xyz.ksharma.scrolltotop.ui.components.ListItem
-import xyz.ksharma.scrolltotop.ui.components.ScrollToTopButton
 
 @Composable
-fun ShoppingCartScreen(shoppingCart: ImmutableMap<String, String>) {
+fun ShoppingCartScreen(modifier: Modifier = Modifier, shoppingCart: ImmutableMap<String, String>) {
     val listState = rememberLazyListState()
     val showButton by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+    val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.secondaryContainer),
+            .background(color = MaterialTheme.colorScheme.primaryContainer),
         contentPadding = PaddingValues(vertical = 32.dp),
         state = listState,
     ) {
@@ -43,7 +54,6 @@ fun ShoppingCartScreen(shoppingCart: ImmutableMap<String, String>) {
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primaryContainer)
                     .padding(horizontal = 24.dp, vertical = 12.dp),
             )
         }
@@ -54,7 +64,7 @@ fun ShoppingCartScreen(shoppingCart: ImmutableMap<String, String>) {
                     text = "No items in list",
                     modifier = Modifier.padding(24.dp),
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             }
         }
@@ -65,20 +75,37 @@ fun ShoppingCartScreen(shoppingCart: ImmutableMap<String, String>) {
         }
 
         item {
-            AnimatedVisibility(
-                visible = showButton,
-                enter = fadeIn(),
-                exit = fadeOut(),
-            ) {
-                ScrollToTopButton(
-                    onClick = {
-                      //  coroutineScope { listState.animateScrollToItem(0) }
-                    },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 50.dp),
-                )
-            }
+            Spacer(modifier = Modifier.padding(32.dp))
+        }
+    }
+
+    AnimatedVisibility(
+        visible = showButton,
+        enter = slideInVertically(
+            animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
+            initialOffsetY = { it }),
+        exit = slideOutVertically(
+            animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
+            targetOffsetY = { it }
+        ),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .padding(24.dp),
+            contentAlignment = Alignment.BottomEnd,
+        ) {
+            FloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.tertiary,
+                onClick = { coroutineScope.launch { listState.animateScrollToItem(0) } },
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = "Scroll to Top"
+                    )
+                })
         }
     }
 }
