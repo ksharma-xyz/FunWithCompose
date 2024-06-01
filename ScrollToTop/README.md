@@ -1,4 +1,4 @@
-#SideEffects - derivedStateOf()
+# SideEffects - derivedStateOf()
 
 This demo project to showcase the usage of `derivedStateOf()` Side Effect by building scroll to top functionality.
 
